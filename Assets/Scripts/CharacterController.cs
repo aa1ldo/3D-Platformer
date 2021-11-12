@@ -15,7 +15,11 @@ public class CharacterController : MonoBehaviour
     bool isOnGround;
     public GameObject groundChecker;
     public LayerMask groundLayer;
-    public float jumpForce = 300.0f;
+    float jumpForce = 0.0f;
+
+    float charger = 0.0f;
+    bool discharge = false;
+
 
     private void Start()
     {
@@ -27,13 +31,44 @@ public class CharacterController : MonoBehaviour
     {
         isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.1f, groundLayer);
 
-        if (isOnGround == true && Input.GetKeyDown(KeyCode.Space))
+
+        //if (isOnGround == true && Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    timer += Time.deltaTime;
+        //}
+
+        //if (isOnGround == true && Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    myRigidbody.AddForce(transform.up * jumpForce);
+        //    Debug.Log(timer);
+        //}
+
+        if (Input.GetKey(KeyCode.Space))
         {
-            myRigidbody.AddForce(transform.up * jumpForce);
+            charger += Time.deltaTime;
         }
 
-        //transform.position = transform.position + (transform.forward * Input.GetAxis("Vertical") * maxSpeed);
-        //transform.position = transform.position + (transform.right * Input.GetAxis("Horizontal") * maxSpeed);
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            discharge = true;
+        }
+
+        if (isOnGround == true && discharge == true)
+        {
+            jumpForce = 1500 * charger;
+
+            Debug.Log(jumpForce);
+
+            if (jumpForce < 600f)
+            {
+                jumpForce = 600f;
+            }
+
+            myRigidbody.AddForce(transform.up * jumpForce);
+
+            discharge = false;
+            charger = 0f;
+        }
 
         Vector3 newVelocity = (transform.forward * Input.GetAxis("Vertical") * maxSpeed) + (transform.right * Input.GetAxis("Horizontal") * maxSpeed);
         myRigidbody.velocity = new Vector3(newVelocity.x, myRigidbody.velocity.y, newVelocity.z);
@@ -46,4 +81,16 @@ public class CharacterController : MonoBehaviour
         camRotation = Mathf.Clamp(camRotation, -40.0f, 40.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
     }
+
+    //private void FixedUpdate()
+    //{
+    //    if (discharge)
+    //    {
+    //        jumpForce = 100 * charger;
+    //        myRigidbody.AddForce(transform.up * jumpForce);
+
+    //        discharge = false;
+    //        charger = 0f;
+    //    }
+    //}
 }
