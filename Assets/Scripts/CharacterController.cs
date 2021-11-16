@@ -55,13 +55,13 @@ public class CharacterController : MonoBehaviour
 
         if (isOnGround == true && discharge == true)
         {
-            jumpForce = 1500 * charger;
+            jumpForce = 5000 * charger;
 
             Debug.Log(jumpForce);
 
-            if (jumpForce < 600f)
+            if (jumpForce < 1500f)
             {
-                jumpForce = 600f;
+                jumpForce = 1500f;
             }
 
             myRigidbody.AddForce(transform.up * jumpForce);
@@ -78,7 +78,7 @@ public class CharacterController : MonoBehaviour
 
         camRotation = camRotation + Input.GetAxis("Mouse Y") * camRotationSpeed;
 
-        camRotation = Mathf.Clamp(camRotation, -40.0f, 40.0f);
+        camRotation = Mathf.Clamp(camRotation, -60.0f, -25.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
     }
 
