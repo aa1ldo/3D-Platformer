@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CharacterController : MonoBehaviour
 {
-    public float maxSpeed = 0.05f;
+    public float maxSpeed = 7f;
     float rotation = 0.0f;
     float camRotation = 0.0f;
     public float rotationSpeed = 2.0f;
@@ -45,23 +45,28 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
+            maxSpeed = 0f;
             charger += Time.deltaTime;
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             discharge = true;
+            maxSpeed = 7f;
         }
 
         if (isOnGround == true && discharge == true)
         {
-            jumpForce = 5000 * charger;
+            jumpForce = 2000 * charger;
 
             Debug.Log(jumpForce);
 
             if (jumpForce < 1500f)
             {
                 jumpForce = 1500f;
+            } else if (jumpForce > 4000f)
+            {
+                jumpForce = 4000f;
             }
 
             myRigidbody.AddForce(transform.up * jumpForce);
@@ -78,7 +83,7 @@ public class CharacterController : MonoBehaviour
 
         camRotation = camRotation + Input.GetAxis("Mouse Y") * camRotationSpeed;
 
-        camRotation = Mathf.Clamp(camRotation, -60.0f, -25.0f);
+        camRotation = Mathf.Clamp(camRotation, -40.0f, -40.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
     }
 
