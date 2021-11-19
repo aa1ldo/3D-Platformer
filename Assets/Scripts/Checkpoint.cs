@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathTrigger : MonoBehaviour
+public class Checkpoint : MonoBehaviour
 {
     CharacterController player;
+    public Vector3 respawnPoint;
 
     private void Start()
     {
@@ -15,7 +16,8 @@ public class DeathTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Game Over");
+            respawnPoint = player.myRigidbody.transform.position;
+            Debug.Log(respawnPoint);
         }
     }
 }

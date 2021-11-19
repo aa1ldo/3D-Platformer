@@ -10,7 +10,7 @@ public class CharacterController : MonoBehaviour
     public float rotationSpeed = 2.0f;
     public float camRotationSpeed = 1.5f;
     GameObject cam;
-    Rigidbody myRigidbody;
+    public Rigidbody myRigidbody;
 
     bool isOnGround;
     public GameObject groundChecker;
