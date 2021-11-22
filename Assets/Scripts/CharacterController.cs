@@ -16,6 +16,7 @@ public class CharacterController : MonoBehaviour
     public GameObject groundChecker;
     public LayerMask groundLayer;
     float jumpForce = 0.0f;
+    public float jumpMultiplier = 2000f;
 
     float charger = 0.0f;
     bool discharge = false;
@@ -57,17 +58,17 @@ public class CharacterController : MonoBehaviour
 
         if (isOnGround == true && discharge == true)
         {
-            jumpForce = 2000 * charger;
+            jumpForce = jumpMultiplier * charger;
+
+            if (jumpForce < 3000f)
+            {
+                jumpForce = 3000f;
+            } else if (jumpForce > 5000f)
+            {
+                jumpForce = 5000f;
+            }
 
             Debug.Log(jumpForce);
-
-            if (jumpForce < 1500f)
-            {
-                jumpForce = 1500f;
-            } else if (jumpForce > 4000f)
-            {
-                jumpForce = 4000f;
-            }
 
             myRigidbody.AddForce(transform.up * jumpForce);
 
