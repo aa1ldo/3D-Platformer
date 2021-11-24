@@ -17,7 +17,6 @@ public class Checkpoint : MonoBehaviour
         if (other.tag == "Player")
         {
             respawnPoint = player.myRigidbody.transform.position;
-            Debug.Log(respawnPoint);
         }
     }
 }
