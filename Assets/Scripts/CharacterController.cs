@@ -21,9 +21,12 @@ public class CharacterController : MonoBehaviour
     float charger = 0.0f;
     bool discharge = false;
 
+    Animator myAnim;
+
 
     private void Start()
     {
+        myAnim = GetComponentInChildren<Animator>();
         Cursor.lockState = CursorLockMode.Locked;
         cam = GameObject.Find("Main Camera");
         myRigidbody = GetComponent<Rigidbody>();
@@ -31,7 +34,7 @@ public class CharacterController : MonoBehaviour
     void Update()
     {
         isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.1f, groundLayer);
-
+        myAnim.SetBool("isOnGround", isOnGround);
 
         //if (isOnGround == true && Input.GetKeyDown(KeyCode.Space))
         //{
@@ -48,12 +51,15 @@ public class CharacterController : MonoBehaviour
         {
             maxSpeed = 0f;
             charger += Time.deltaTime;
+            myAnim.SetBool("isCharging", true);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
             discharge = true;
             maxSpeed = 7f;
+            myAnim.SetBool("isCharging", false);
+            myAnim.SetTrigger("isRelease");
         }
 
         if (isOnGround == true && discharge == true)
@@ -77,6 +83,9 @@ public class CharacterController : MonoBehaviour
         }
 
         Vector3 newVelocity = (transform.forward * Input.GetAxis("Vertical") * maxSpeed) + (transform.right * Input.GetAxis("Horizontal") * maxSpeed);
+
+        myAnim.SetFloat("speed", newVelocity.magnitude);
+
         myRigidbody.velocity = new Vector3(newVelocity.x, myRigidbody.velocity.y, newVelocity.z);
 
         rotation = rotation + Input.GetAxis("Mouse X") * rotationSpeed;
