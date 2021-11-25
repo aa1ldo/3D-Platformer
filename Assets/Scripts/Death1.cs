@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeathTrigger1 : MonoBehaviour
+public class Death1 : MonoBehaviour
 {
     CharacterController player;
     [SerializeField] private Transform respawnPoint1;

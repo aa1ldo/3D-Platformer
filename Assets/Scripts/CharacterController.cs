@@ -23,6 +23,7 @@ public class CharacterController : MonoBehaviour
 
     Animator myAnim;
 
+    Rigidbody lillypad;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class CharacterController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cam = GameObject.Find("Main Camera");
         myRigidbody = GetComponent<Rigidbody>();
+        lillypad = GameObject.Find("lillypad").GetComponent<Rigidbody>();
     }
     void Update()
     {
@@ -49,7 +51,7 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
-            maxSpeed = 0f;
+            maxSpeed = 1f;
             charger += Time.deltaTime;
             myAnim.SetBool("isCharging", true);
         }
@@ -59,7 +61,7 @@ public class CharacterController : MonoBehaviour
             discharge = true;
             maxSpeed = 7f;
             myAnim.SetBool("isCharging", false);
-            myAnim.SetTrigger("isRelease");
+            myAnim.SetBool("isRelease", true);
         }
 
         if (isOnGround == true && discharge == true)
@@ -79,6 +81,7 @@ public class CharacterController : MonoBehaviour
             myRigidbody.AddForce(transform.up * jumpForce);
 
             discharge = false;
+            myAnim.SetBool("isRelease", false);
             charger = 0f;
         }
 
@@ -108,4 +111,13 @@ public class CharacterController : MonoBehaviour
     //        charger = 0f;
     //    }
     //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "lillypad")
+        {
+            myRigidbody.velocity = Vector3.zero;
+            myRigidbody.AddForce(transform.up * 20000f);
+        }
+    }
 }
