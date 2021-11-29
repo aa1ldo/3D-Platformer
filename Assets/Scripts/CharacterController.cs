@@ -10,6 +10,7 @@ public class CharacterController : MonoBehaviour
     public float rotationSpeed = 2.0f;
     public float camRotationSpeed = 1.5f;
     GameObject cam;
+
     public Rigidbody myRigidbody;
 
     bool isOnGround;
@@ -35,7 +36,7 @@ public class CharacterController : MonoBehaviour
     }
     void Update()
     {
-        isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.1f, groundLayer);
+        isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.5f, groundLayer);
         myAnim.SetBool("isOnGround", isOnGround);
 
         //if (isOnGround == true && Input.GetKeyDown(KeyCode.Space))
@@ -96,7 +97,7 @@ public class CharacterController : MonoBehaviour
 
         camRotation = camRotation + Input.GetAxis("Mouse Y") * camRotationSpeed;
 
-        camRotation = Mathf.Clamp(camRotation, -40.0f, -40.0f);
+        camRotation = Mathf.Clamp(camRotation, -25.0f, -25.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
     }
 
