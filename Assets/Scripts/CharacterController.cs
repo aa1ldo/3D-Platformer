@@ -13,14 +13,14 @@ public class CharacterController : MonoBehaviour
 
     public Rigidbody myRigidbody;
 
-    bool isOnGround;
+    public bool isOnGround;
     public GameObject groundChecker;
     public LayerMask groundLayer;
     float jumpForce = 0.0f;
-    public float jumpMultiplier = 2000f;
+    public float jumpMultiplier = 1500f;
 
     float charger = 0.0f;
-    bool discharge = false;
+    public bool discharge = false;
 
     Animator myAnim;
 
@@ -36,25 +36,16 @@ public class CharacterController : MonoBehaviour
     }
     void Update()
     {
-        isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.5f, groundLayer);
+        isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.3f, groundLayer);
         myAnim.SetBool("isOnGround", isOnGround);
 
-        //if (isOnGround == true && Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    timer += Time.deltaTime;
-        //}
-
-        //if (isOnGround == true && Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    myRigidbody.AddForce(transform.up * jumpForce);
-        //    Debug.Log(timer);
-        //}
 
         if (Input.GetKey(KeyCode.Space))
         {
             maxSpeed = 1f;
             charger += Time.deltaTime;
             myAnim.SetBool("isCharging", true);
+            Debug.Log(charger);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
@@ -69,12 +60,12 @@ public class CharacterController : MonoBehaviour
         {
             jumpForce = jumpMultiplier * charger;
 
-            if (jumpForce < 3000f)
+            if (jumpForce < 1500f)
             {
-                jumpForce = 3000f;
-            } else if (jumpForce > 5000f)
+                jumpForce = 1500f;
+            } else if (jumpForce > 6000f)
             {
-                jumpForce = 5000f;
+                jumpForce = 6000f;
             }
 
             Debug.Log(jumpForce);
