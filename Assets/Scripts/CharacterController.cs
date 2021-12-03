@@ -31,6 +31,8 @@ public class CharacterController : MonoBehaviour
 
     bool isCharging;
 
+    public GameObject playerVisuals;
+
     private void Start()
     {
         myAnim = GetComponentInChildren<Animator>();
@@ -44,6 +46,11 @@ public class CharacterController : MonoBehaviour
     {
         isOnGround = Physics.CheckSphere(groundChecker.transform.position, 0.3f, groundLayer);
         myAnim.SetBool("isOnGround", isOnGround);
+
+        Vector3 inputVector = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+        inputVector = Vector3.Normalize(inputVector);
+        Quaternion newRotation = Quaternion.LookRotation(inputVector);
+        playerVisuals.transform.localRotation = newRotation;
 
 
         if (Input.GetKey(KeyCode.Space))
