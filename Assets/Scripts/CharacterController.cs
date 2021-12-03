@@ -24,7 +24,8 @@ public class CharacterController : MonoBehaviour
 
     Animator myAnim;
 
-    Rigidbody lillypad;
+    AudioSource myAudioSource;
+    float delay = 0.5f;
 
     private void Start()
     {
@@ -32,7 +33,7 @@ public class CharacterController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cam = GameObject.Find("Main Camera");
         myRigidbody = GetComponent<Rigidbody>();
-        lillypad = GameObject.Find("lillypad").GetComponent<Rigidbody>();
+        myAudioSource = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -90,6 +91,13 @@ public class CharacterController : MonoBehaviour
 
         camRotation = Mathf.Clamp(camRotation, -25.0f, -25.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
+
+        if ((myRigidbody.velocity.magnitude > 0.1f) && (myAudioSource.isPlaying == false))
+        {
+            myAudioSource.volume = Random.Range(0.8f, 1.0f);
+            myAudioSource.pitch = Random.Range(0.8f, 1.1f);
+            myAudioSource.Play();
+        }
     }
 
     //private void FixedUpdate()
