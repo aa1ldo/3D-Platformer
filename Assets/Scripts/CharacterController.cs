@@ -24,8 +24,12 @@ public class CharacterController : MonoBehaviour
 
     Animator myAnim;
 
-    AudioSource myAudioSource;
-    float delay = 0.5f;
+    float footstepTimer = 0f;
+
+    AudioSource footstepAudioSource;
+    AudioSource fallingAudioSource;
+
+    bool isCharging;
 
     private void Start()
     {
@@ -33,7 +37,8 @@ public class CharacterController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cam = GameObject.Find("Main Camera");
         myRigidbody = GetComponent<Rigidbody>();
-        myAudioSource = GetComponent<AudioSource>();
+        footstepAudioSource = GameObject.Find("footstepsfx").GetComponent<AudioSource>();
+        fallingAudioSource = GameObject.Find("fallingsfx").GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -43,17 +48,19 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Space))
         {
+            isCharging = true;
             maxSpeed = 1f;
             charger += Time.deltaTime;
-            myAnim.SetBool("isCharging", true);
+            myAnim.SetBool("isCharging", isCharging);
             Debug.Log(charger);
         }
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
+            isCharging = false;
             discharge = true;
             maxSpeed = 7f;
-            myAnim.SetBool("isCharging", false);
+            myAnim.SetBool("isCharging", isCharging);
             myAnim.SetBool("isRelease", true);
         }
 
@@ -92,11 +99,30 @@ public class CharacterController : MonoBehaviour
         camRotation = Mathf.Clamp(camRotation, -25.0f, -25.0f);
         cam.transform.localRotation = Quaternion.Euler(new Vector3(-camRotation, 0.0f, 0.0f));
 
-        if ((myRigidbody.velocity.magnitude > 0.1f) && (myAudioSource.isPlaying == false))
+        footstepTimer += Time.deltaTime;
+
+        if ((myRigidbody.velocity.magnitude > 1.0f) && footstepTimer > 0.4f && isOnGround == true && isCharging == false)
         {
-            myAudioSource.volume = Random.Range(0.8f, 1.0f);
-            myAudioSource.pitch = Random.Range(0.8f, 1.1f);
-            myAudioSource.Play();
+            footstepTimer = 0.0f;
+            footstepAudioSource.volume = Random.Range(0.8f, 1.0f);
+            footstepAudioSource.pitch = Random.Range(0.8f, 1.1f);
+            footstepAudioSource.Play();
+        }
+        
+        if ((myRigidbody.velocity.magnitude > 0.1f) && footstepTimer > 0.6f && isOnGround == true && isCharging == true)
+        {
+            footstepTimer = 0.0f;
+            footstepAudioSource.volume = Random.Range(0.8f, 1.0f);
+            footstepAudioSource.pitch = Random.Range(0.8f, 1.1f);
+            footstepAudioSource.Play();
+        }
+
+        if (isOnGround == false)
+        {
+            fallingAudioSource.Play();
+        } else
+        {
+            fallingAudioSource.Stop();
         }
     }
 
